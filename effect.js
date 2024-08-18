@@ -169,29 +169,37 @@ $('document').ready(function(){
 		$('.cake').fadeOut('fast').promise().done(function(){
 			$('.message').fadeIn(2000);
 		});
-		
+	
 		var i;
-
-		function msgLoop (i) {
+	
+		function msgLoop(i) {
 			$("p:nth-child("+i+")").fadeOut('slow').delay(1200).promise().done(function(){
-			i=i+1;
-			$("p:nth-child("+i+")").fadeIn('slow').delay(1500);
-			if(i==50){
-				$("p:nth-child(49)").fadeOut('slow').promise().done(function () {
-					$('.cake').fadeIn('fast');
-				});
-				
-			}
-			else{
-				msgLoop(i);
-			}			
-
-		});
-			// body...
+				i = i + 1;
+				$("p:nth-child("+i+")").fadeIn('slow').delay(1500);
+				if(i == 50){
+					$("p:nth-child(49)").fadeOut('slow').promise().done(function(){
+						$('.cake').fadeIn('fast');
+						// Hiển thị video sau khi tất cả đã hoàn thành
+						$('#video_container').fadeIn('slow');
+					});
+				} else {
+					msgLoop(i);
+				}
+			});
 		}
-		
+	
 		msgLoop(0);
-		
+	});
+	
+	// Đảm bảo rằng video ẩn lúc đầu
+	$('#video_container').hide();
+	
+	// Tắt nhạc khi video bắt đầu chạy
+	$('#video_container video').on('play', function(){
+		var audio = $('.song')[0];
+		audio.pause();
+		audio.currentTime = 0; // Đặt lại nhạc về đầu
+		$('.cake').fadeOut('fast');
 	});
 });
 
